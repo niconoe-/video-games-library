@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    $('#choosePlatform > li > a').click(function(e) {
+    $('ul#choosePlatform > li > a').click(function(e) {
         e.preventDefault();
         $('#platform').val($(this).data('value'));
 

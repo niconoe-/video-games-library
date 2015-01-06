@@ -78,7 +78,7 @@ class VGL_WebServices_Platform
 
     public function isPlatform()
     {
-        return (count($this->oXml->getElementsByTagName('Platform')) > 0);
+        return (count((array)$this->oXml->getElementsByTagName('Platform')) > 0);
     }
 
 }

@@ -10,7 +10,7 @@
         <p>La dernière mise à jour des jeux date du <?= $this->escape($this->dateLastUpdateGameList); ?></p>
         <?php endif; ?>
         <section>
-            <form role="form" method="post" action="/update/game-list">
+            <form role="form" method="post" action="<?= '/update/game-list' ?>">
                 <div class="form-group">
                     <button class="btn btn-danger" type="submit">Mettre à jour</button>
                 </div>
@@ -24,7 +24,7 @@
             <p>La dernière mise à jour des plateformes date du <?= $this->escape($this->dateLastUpdatePlatformList); ?></p>
         <?php endif; ?>
         <section>
-            <form role="form" method="post" action="/update/platform-list">
+            <form role="form" method="post" action="<?= '/update/platform-list' ?>">
                 <div class="form-group">
                     <button class="btn btn-danger" type="submit">Mettre à jour</button>
                 </div>
@@ -35,7 +35,9 @@
     <?php if ($this->addSectionClearCache): ?>
     <section>
         <div class="text-center">
-            <?= $this->alert('<a href="/update/clean-cache" class="alert-link">Vider tous les caches</a>')->warning() ?>
+            <?= $this->alert(
+                '<a href="' . '/update/clean-cache' . '" class="alert-link">Vider tous les caches</a>'
+            )->warning() ?>
         </div>
     </section>
     <?php endif; ?>
