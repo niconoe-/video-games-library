@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle(); ?>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- CSS -->
+        <?php echo $this->headLink(); ?>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">VGL</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li<?php echo ($this->activeNavTab === 'Rechercher' ? ' class="active"' : ''); ?>><a href="/">Rechercher</a></li>
+                        <li<?php echo ($this->activeNavTab === 'Mes jeux' ? ' class="active"' : ''); ?>><a href="/game/index">Mes jeux</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li<?php echo ($this->activeNavTab === 'Update' ? ' class="active"' : ''); ?>><a href="/update/index">Update</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        <?php if (false): ?>
+        <div class="alert alert-info text-center" data-spy="affix" data-offset-top="60" data-offset-bottom="200" style="z-index: 2147000000">
+            <div class="visible-xs">Mode : XS</div>
+            <div class="visible-sm">Mode : SM</div>
+            <div class="visible-md">Mode : MD</div>
+            <div class="visible-lg">Mode : LG</div>
+        </div>
+        <?php endif; ?>
+        <article class="container-fluid">
+            <?php echo $this->layout()->content ?>
+        </article>
+        <footer class="footer">
+            <div class="content-fluid">
+                <p class="text-center">Video Games Library &copy; 2014-2015</p>
+            </div>
+        </footer>
+        <?php
+            $this->headScript()->prependFile('/js/jquery-2.1.1.min.js');
+            echo $this->headScript();
+        ?>
+    </body>
+</html>

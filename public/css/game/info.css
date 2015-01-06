@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+.banner-separation {
+    margin: 24px 0;
+}
+
+.inline-block {
+    display: inline-block !important;
+}
+
+.asidePictures {
+    padding: 0;
+}
+
+.asidePictures>a{
+    margin-bottom: 0;
+}

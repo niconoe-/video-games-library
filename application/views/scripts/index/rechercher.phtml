@@ -1,0 +1,64 @@
+<?php
+    $this->headTitle('Rechercher un jeu');
+
+?>
+<main role="main">
+    <div class="jumbotron">
+        <h1>Video Games Library <small>Rechercher un jeu</small></h1>
+        <p>Rechercher un jeu par son nom dans la base de données de <a href="http://www.thegamesdb.net">http://www.thegamesdb.net</a></p>
+        <section>
+            <form role="form" method="post" action="/index/rechercher">
+                <div class="form-group">
+                    <label for="search" class="sr-only">Rechercher un jeu</label>
+                    <input id="platform" name="platform" type="hidden" value="<?= $this->sPlatform ?>">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button id="btn-choosePlatform" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    aria-expanded="false"><?php echo (empty($this->sPlatform) ? 'Toutes les plateformes' : $this->sPlatform); ?> <span class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu" id="choosePlatform">
+                                <li><a href="#" data-value="">Toutes les plateformes</a></li>
+                                <?php foreach ($this->platformList as $groupName => $groupContent): ?>
+                                    <li class="divider"></li>
+                                    <li role="presentation" class="dropdown-header"><?= $groupName ?></li>
+                                    <?php foreach ($groupContent as $sPlatformName): ?>
+                                        <li><a href="#" data-value="<?= $sPlatformName ?>"><?= $sPlatformName ?></a></li>
+                                    <?php endforeach; ?>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <input type="text" id="search" name="search" tabindex="0" placeholder="Rechercher un jeu..."
+                               class="form-control" value="<?= $this->escape($this->sSearch); ?>">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Go!</button>
+                        </div>
+                    </div><!-- /input-group -->
+                </div>
+            </form>
+        </section>
+    </div>
+    <?php if (!empty($this->aGameList)): ?>
+        <div class="container-fluid">
+            <div class="col-sm-8 col-sm-offset-2 col-xs-12">
+                <h2>Liste des jeux trouvés</h2>
+                <ul class="list-group">
+                <?php foreach ($this->aGameList as $aGame): ?>
+                    <li class="list-group-item">
+                        <div class="pull-left">
+                            <h4 class="list-group-item-heading"><?= $this->escape($aGame['GameTitle']); ?></h4>
+                            <p class="list-group-item-text">
+                                Sorti sur <?= $this->escape($aGame['Platform']) ?>
+                                <?php echo (null !== $aGame['ReleaseDate']) ? (' le ' . $this->escape($aGame['ReleaseDate'])) : ''; ?>
+                            </p>
+                        </div>
+                        <div class="pull-right">
+                            <a class="btn btn-info" href="/game/info/id/<?= $this->escape($aGame['id']) ?>">Infos</a>
+                            <a class="btn btn-primary" href="/game/add/id/<?= $this->escape($aGame['id']) ?>">Ajouter</a>
+                        </div>
+                        <div style="clear: both"></div>
+                    </li>
+                <?php endforeach ?>
+                </ul>
+            </div>
+        </div>
+    <?php endif; ?>
+</main>

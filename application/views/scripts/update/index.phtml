@@ -1,0 +1,42 @@
+<?php
+    $this->headTitle('Update');
+
+?>
+<main role="main">
+    <?php echo $this->flashMessage; ?>
+    <div class="jumbotron">
+        <h2>Jeux : <small>demander une mise à jour</small></h2>
+        <?php if ($this->dateLastUpdateGameList): ?>
+        <p>La dernière mise à jour des jeux date du <?= $this->escape($this->dateLastUpdateGameList); ?></p>
+        <?php endif; ?>
+        <section>
+            <form role="form" method="post" action="/update/game-list">
+                <div class="form-group">
+                    <button class="btn btn-danger" type="submit">Mettre à jour</button>
+                </div>
+            </form>
+        </section>
+        <?php echo $this->flashMessageUpdateGameList; ?>
+    </div>
+    <div class="jumbotron">
+        <h2>Plateformes : <small>demander une mise à jour</small></h2>
+        <?php if ($this->dateLastUpdatePlatformList): ?>
+            <p>La dernière mise à jour des plateformes date du <?= $this->escape($this->dateLastUpdatePlatformList); ?></p>
+        <?php endif; ?>
+        <section>
+            <form role="form" method="post" action="/update/platform-list">
+                <div class="form-group">
+                    <button class="btn btn-danger" type="submit">Mettre à jour</button>
+                </div>
+            </form>
+        </section>
+        <?php echo $this->flashMessageUpdatePlatformList; ?>
+    </div>
+    <?php if ($this->addSectionClearCache): ?>
+    <section>
+        <div class="text-center">
+            <?= $this->alert('<a href="/update/clean-cache" class="alert-link">Vider tous les caches</a>')->warning() ?>
+        </div>
+    </section>
+    <?php endif; ?>
+</main>

@@ -1,0 +1,230 @@
+<?php
+    $aGame = $this->aGame;
+    $this->headTitle($aGame['title']);
+
+    $aBanners = $this->aBanners;
+    $aAsidePics = $this->aAsidePics;
+    $aBoxarts = $this->aBoxarts;
+
+    $sPlatformName = isset($this->oPlatform->name) ? $this->oPlatform->name : null;
+
+    $srcMainPic = '/images/no-pic-300-400.jpg';
+    foreach ($aBoxarts as $aBoxart) {
+        if ($aBoxart['scaleType'] === 'thumb') {
+            $srcMainPic = $aBoxart['relativeURL'];
+            break;
+        }
+    }
+
+    $sGenres    = (empty($aGame['Genres'])    ? false : implode("\n", $aGame['Genres']));
+    $sEsrb      = (empty($aGame['ESRB'])      ? false : $aGame['ESRB']);
+    $sPlayers   = (empty($aGame['players'])   ? false : $aGame['players']);
+    $sYoutube   = (empty($aGame['youtube'])   ? false : $aGame['youtube']);
+    $sPublisher = (empty($aGame['publisher']) ? false : $aGame['publisher']);
+    $sDeveloper = (empty($aGame['developer']) ? false : $aGame['developer']);
+
+    parse_str(parse_url($sYoutube, PHP_URL_QUERY), $aYoutubeParams);
+    if (!empty($aYoutubeParams['v'])) {
+        $sYoutubeEmbedURL = 'http://www.youtube.com/embed/' . $aYoutubeParams['v'];
+    } else {
+        $sYoutubeEmbedURL = $sYoutube;
+    }
+
+    $sIsCoop = $aGame['isCoop'] ? 'Coopération' : 'Solo';
+
+    $iRating = null;
+    $sStyleRating = null;
+    if (!empty($aGame['rating'])) {
+        $iRating = $aGame['rating'] * 10;
+        if ($iRating < 30) {
+            $sStyleRating = 'progress-bar-danger';
+        } elseif ($iRating < 70) {
+            $sStyleRating = 'progress-bar-warning';
+        } else {
+            $sStyleRating = 'progress-bar-success';
+        }
+    }
+
+    $aURLBoxarts = [];
+    foreach ($aBoxarts as $aBoxart) {
+        $aURLBoxarts[$aBoxart['category']][$aBoxart['scaleType']] = $aBoxart['relativeURL'];
+    }
+
+    $bInfo = $sGenres || $sEsrb || $sPlayers || $sPublisher || $sDeveloper || $sIsCoop;
+    $bAsideInfo = $sYoutube || !empty($aAsidePics);
+
+    $sAbbrEsrb = ($sEsrb) ? trim(substr($sEsrb, 0, strpos($sEsrb, ' '))) : null;
+
+?>
+<main role="main">
+    <?php echo $this->flashMessage; ?>
+    <div class="jumbotron">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-2 col-xs-4 text-center">
+                    <img src="<?= $srcMainPic ?>" class="img-responsive img-thumbnail" alt="<?= $this->escape($aGame['title']); ?>">
+                    <hr>
+                    <a class="btn btn-primary btn-lg" href="/game/add/id/<?= $this->escape($aGame['id']) ?>">Ajouter</a>
+                </div>
+                <div class="col-lg-10 col-xs-8">
+                    <h1><?= $this->escape($aGame['title']); ?></h1>
+                    <p>
+                        <?php if (!empty($aGame['releaseDate'])): ?>
+                        Sorti le <?= $this->escape($aGame['releaseDate']); ?>
+                        <?php endif; ?>
+                        <?php if (!empty($sPlatformName)): ?>
+                        sur <?= $this->escape($sPlatformName); ?>
+                        <?php endif; ?>
+                    </p>
+                    <?php if (!empty($aGame['overview'])): ?>
+                    <div class="text-justify">
+                        <p data-ellipsis data-ellipsis-row="5"><?= $this->escape($aGame['overview']); ?></p>
+                    </div>
+                    <?php endif; ?>
+                    <?php if (!empty($aGame['rating'])): ?>
+                    <div class="progress">
+                        <div class="progress-bar <?= $sStyleRating ?>" role="progressbar"
+                             aria-valuenow="<?= $iRating ?>" aria-valuemin="0" aria-valuemax="100"
+                             style="width: <?= $iRating ?>%">
+                            <?= $aGame['rating'] ?> / 10
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid banner-separation">
+        <div class="col-xs-12">
+        <?php
+            if (!empty($aBanners)) {
+                $aCurrentBanner = array_shift($aBanners);
+                echo '<img class="img-responsive center-block" src="' . $this->escape($aCurrentBanner['relativeURL']) . '" alt="Banner">';
+            } else {
+                echo '<hr>';
+            }
+        ?>
+        </div>
+    </div>
+    <?php if ($bInfo || $bAsideInfo): ?>
+    <section class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <?php if ($bInfo): ?>
+                <div class="row">
+                    <div class="container-fluid well">
+                        <div class="row">
+                            <dl class="dl-horizontal col-md-9 col-sm-10 col-xs-5 pull-left">
+                                <?php if ($sGenres): ?><dt>Genres</dt><dd><?= nl2br($this->escape($sGenres)) ?></dd><?php endif; ?>
+                                <?php if ($sEsrb): ?><dt><abbr title="Entertainment Software Rating Board">ESRB</abbr></dt><dd><?= $this->escape($sEsrb) ?></dd><?php endif; ?>
+                                <?php if ($sPlayers): ?><dt>Players</dt><dd><?= $this->escape($sPlayers) ?></dd><?php endif; ?>
+                                <?php if ($sIsCoop): ?><dt>Jouable en</dt><dd><?= $this->escape($sIsCoop) ?></dd><?php endif; ?>
+                                <?php if ($sDeveloper): ?><dt>Développé par</dt><dd><?= $this->escape($sDeveloper) ?></dd><?php endif; ?>
+                                <?php if ($sPublisher): ?><dt>Édité par</dt><dd><?= $this->escape($sPublisher) ?></dd><?php endif; ?>
+                            </dl>
+                            <?php if ($sAbbrEsrb): ?>
+                            <div class="col-md-3 col-sm-2 hidden-xs text-center">
+                                <img class="img-responsive"
+                                     src="/images/ESRB/<?= $this->escape($sAbbrEsrb) ?>.png"
+                                     alt="ESRB: <?= $this->escape($sEsrb) ?>"
+                                     title="ESRB: <?= $this->escape($sEsrb) ?>">
+                            </div>
+                            <div class="visible-xs-block col-xs-7">
+                                <img class="img-responsive pull-right"
+                                     src="/images/ESRB/<?= $this->escape($sAbbrEsrb) ?>.png"
+                                     alt="ESRB: <?= $this->escape($sEsrb) ?>"
+                                     title="ESRB: <?= $this->escape($sEsrb) ?>">
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <?php
+                    $sOriginalUrl = '';
+                    foreach ($aAsidePics as $aAsidePic) {
+                        if ($aAsidePic['scaleType'] === 'original') {
+                            $sOriginalUrl = $this->escape($aAsidePic['relativeURL']);
+                        } elseif ($aAsidePic['scaleType'] === 'thumb') {
+                            ?>
+                            <div class="col-lg-4 col-xs-6 asidePictures">
+                            <?= '<a href="' . $sOriginalUrl . '" target="_blank" class="thumbnail inline-block img-responsive">'
+                                . '<img src="' . $this->escape($aAsidePic['relativeURL']) . '"
+                                    alt="' . ucfirst($this->escape($aAsidePic['category'])) . ' of ' . $this->escape($aGame['title']) . '"
+                                    title="' . ucfirst($this->escape($aAsidePic['category'])) . ' of ' . $this->escape($aGame['title']) . '"
+                                ></a>';
+                            ?>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+                <?php endif; ?>
+            </div>
+            <div class="col-md-6 col-sm-12 text-center">
+                <?php if ($bAsideInfo): ?>
+                <aside class="container-fluid">
+                    <?php if ($sYoutubeEmbedURL): ?>
+                    <p class="row embed-responsive embed-responsive-16by9 hidden-xs">
+                        <iframe class="embed-responsive-item" src="<?= $this->escape($sYoutubeEmbedURL) ?>" allowfullscreen></iframe>
+                    </p>
+                    <?php endif; ?>
+                    <?php if ($sYoutube): ?>
+                    <p><a href="<?= $this->escape($sYoutube) ?>" target="_blank" class="btn btn-info">Voir la vidéo sur YouTube</a></p>
+                    <?php endif; ?>
+                </aside>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
+    <div class="container-fluid banner-separation">
+        <div class="col-xs-12 text-center">
+        <?php
+        if (!empty($aBanners)) {
+            $aCurrentBanner = array_shift($aBanners);
+            echo '<img class="img-responsive center-block" src="' . $this->escape($aCurrentBanner['relativeURL']) . '" alt="Banner"/>';
+        } else {
+            echo '<hr>';
+        }
+        ?>
+        </div>
+    </div>
+    <?php if (!empty($aURLBoxarts) || !empty($aBanners)): ?>
+    <section class="container-fluid">
+        <?php if (!empty($aURLBoxarts)): ?>
+        <div class="row">
+            <div class="col-xs-6 text-right">
+            <?php if (!empty($aURLBoxarts['boxartFront'])): ?>
+                <a href="<?= $this->escape($aURLBoxarts['boxartFront']['original']); ?>" target="_blank" class="thumbnail img-responsive inline-block">
+                    <img src="<?= $this->escape($aURLBoxarts['boxartFront']['thumb']); ?>"
+                         alt="<?= $this->escape($aGame['title']) ?>"
+                         title="<?= $this->escape($aGame['title']) ?>"
+                    >
+                </a>
+            <?php endif; ?>
+            </div>
+            <div class="col-xs-6 text-left">
+            <?php if (!empty($aURLBoxarts['boxartBack'])): ?>
+                <a href="<?= $this->escape($aURLBoxarts['boxartBack']['original']); ?>" target="_blank" class="thumbnail img-responsive inline-block">
+                    <img src="<?= $this->escape($aURLBoxarts['boxartBack']['thumb']); ?>"
+                         alt="<?= $this->escape($aGame['title']) ?>"
+                         title="<?= $this->escape($aGame['title']) ?>"
+                    >
+                </a>
+            <?php endif; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+        <?php foreach ($aBanners as $aBanner) :?>
+        <div class="row">
+            <div class="col-xs-12">
+                <p><img class="img-responsive center-block" src="<?= $this->escape($aBanner['relativeURL'])?>" alt="Banner"/></p>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </section>
+    <?php endif; ?>
+    <div class="container-fluid banner-separation"><hr></div>
+</main>

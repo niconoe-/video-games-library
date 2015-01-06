@@ -1,0 +1,41 @@
+<?php
+    $this->headTitle('Rechercher un jeu');
+
+?>
+<main role="main">
+    <div class="jumbotron">
+        <h1>Video Games Library <small>Rechercher un jeu</small></h1>
+        <p>Rechercher un jeu par son nom dans la base de données de <a href="http://www.thegamesdb.net">http://www.thegamesdb.net</a></p>
+        <section>
+            <form role="form" method="post" action="/index/rechercher">
+                <div class="form-group">
+                    <label for="search" class="sr-only">Rechercher un jeu</label>
+                    <input id="platform" name="platform" type="hidden" value="">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button id="btn-choosePlatform" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    aria-expanded="false">Toutes les plateformes <span class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu" id="choosePlatform">
+                                <li><a href="#" data-value="">Toutes les plateformes</a></li>
+                                <?php foreach ($this->platformList as $groupName => $groupContent): ?>
+                                    <li class="divider"></li>
+                                    <li role="presentation" class="dropdown-header"><?= $groupName ?></li>
+                                    <?php foreach ($groupContent as $sPlatformName): ?>
+                                        <li><a href="#" data-value="<?= $sPlatformName ?>"><?= $sPlatformName ?></a></li>
+                                    <?php endforeach; ?>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <input type="text" id="search" name="search" tabindex="0" placeholder="Rechercher un jeu..."
+                               class="form-control">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Go!</button>
+                        </div>
+                    </div><!-- /input-group -->
+                </div>
+            </form>
+        </section>
+        <?php echo $this->flashMessage; ?>
+    </div>
+
+</main>
