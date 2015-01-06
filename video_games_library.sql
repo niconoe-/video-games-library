@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS `platform` (
   `manufacturer` varchar(255) DEFAULT NULL,
   `cpu` varchar(255) DEFAULT NULL,
   `memory` varchar(255) DEFAULT NULL,
+  `graphics` varchar(255) DEFAULT NULL,
   `sound` varchar(255) DEFAULT NULL,
   `display` varchar(255) DEFAULT NULL,
   `media` varchar(255) DEFAULT NULL,
@@ -130,8 +131,9 @@ CREATE TABLE IF NOT EXISTS `platforms_images` (
 --
 
 CREATE TABLE IF NOT EXISTS `update` (
-`id` int(10) unsigned NOT NULL,
-  `timestampAtRun` timestamp NOT NULL
+    `id` int(10) unsigned NOT NULL,
+    `timestampAtRun` timestamp NOT NULL,
+    `type` VARCHAR(255) NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
