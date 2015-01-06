@@ -37,7 +37,3 @@ Thumbs.db
 # PHPStorm config #
 ###################
 .idea
-
-# Application Specific #
-########################
-data/cache/*
