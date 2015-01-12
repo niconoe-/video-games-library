@@ -12,7 +12,7 @@ class VGL_WebServices_Update
     const SERVICE = 'Updates';
 
     /**
-     * @internal param string $time
+     * @param string ...$time
      * @return VGL_WebServices_Update
      */
     public static function get()

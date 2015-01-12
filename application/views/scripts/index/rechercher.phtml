@@ -42,7 +42,8 @@
                 <h2>Liste des jeux trouvés</h2>
                 <ul class="list-group">
                 <?php foreach ($this->aGameList as $aGame): ?>
-                    <li class="list-group-item">
+                    <?php $sOwnedClass = ($aGame['ownedDate'] ? ' list-group-item-success' : ''); ?>
+                    <li class="list-group-item<?php echo $sOwnedClass ?>">
                         <div class="pull-left">
                             <h4 class="list-group-item-heading"><?= $this->escape($aGame['GameTitle']); ?></h4>
                             <p class="list-group-item-text">
@@ -51,10 +52,19 @@
                             </p>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-info" href="/game/info/id/<?= $this->escape($aGame['id']) ?>">Infos</a>
-                            <a class="btn btn-primary" href="/game/add/id/<?= $this->escape($aGame['id']) ?>">Ajouter</a>
+                            <?php if ($aGame['ownedDate']): ?>
+                                <div><span>Ajouté le <?php echo $aGame['ownedDate']; ?></span></div>
+                            <?php endif; ?>
+                            <div class="text-right">
+                                <a class="btn btn-info" href="/game/info/id/<?= $this->escape($aGame['id']) ?>">Infos</a>
+                                <?php if ($aGame['ownedDate']): ?>
+                                <a class="btn btn-danger" href="/game/delete/id/<?= $this->escape($aGame['id']) ?>">Supprimer</a>
+                                <?php else: ?>
+                                <a class="btn btn-primary" href="/game/add/id/<?= $this->escape($aGame['id']) ?>">Ajouter</a>
+                                <?php endif; ?>
+                            </div>
                         </div>
-                        <div style="clear: both"></div>
+                        <div class="clearfix"></div>
                     </li>
                 <?php endforeach ?>
                 </ul>

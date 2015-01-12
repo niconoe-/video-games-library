@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS `game` (
   `youtube` mediumtext,
   `publisher` varchar(255) DEFAULT NULL,
   `developer` varchar(255) DEFAULT NULL,
-  `rating` decimal(8,6) unsigned DEFAULT NULL
+  `rating` decimal(8,6) unsigned DEFAULT NULL,
+  `addedDate` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

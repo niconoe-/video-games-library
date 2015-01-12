@@ -9,9 +9,7 @@ class VGL_WebServices_GamesList extends VGL_WebServices implements VGL_WebServic
     const SERVICE = 'GetGamesList';
 
     /**
-     * @internal param string $name
-     * @internal param string $platform
-     * @internal param string $genre
+     * @param string ...$name[, $platform[, $genre]]
      * @return VGL_WebServices_GamesList
      */
     public static function get()

@@ -12,9 +12,6 @@ class VGL_WebServices_PlatformsList
     const SERVICE = 'GetPlatformsList';
 
     /**
-     * @internal param string $name
-     * @internal param string $platform
-     * @internal param string $genre
      * @return VGL_WebServices_PlatformsList
      */
     public static function get()

@@ -6,9 +6,8 @@
 class GameController extends VGL_Controller_Action
 {
 
-    public function indexAction()
+    public function init()
     {
-        $this->view->activeNavTab = 'Mes jeux';
         $this->view->flashMessage = '';
         $aFlashMessages = $this->_helper->getHelper('FlashMessenger')->getMessages();
         if (!empty($aFlashMessages)) {
@@ -19,6 +18,14 @@ class GameController extends VGL_Controller_Action
             }
             $this->view->flashMessage = $sAlertFlashMessage;
         }
+
+        parent::init();
+    }
+
+    public function indexAction()
+    {
+        $this->view->activeNavTab = 'Mes jeux';
+
     }
 
     public function infoAction()
@@ -62,13 +69,46 @@ class GameController extends VGL_Controller_Action
                 $this->view->oPlatform = $oPlatform;
             }
         }
-
-
     }
 
     public function addAction()
     {
+        $idGame = intval($this->_getParam('id'));
+        if (is_null($idGame)) {
+            $this->_helper->FlashMessenger(VGL_Utils_CreateMessage::danger('Accès à un jeu inexistant.'));
+            $this->redirect('/');
+            return;
+        }
 
+        $oXml = VGL_WebServices_Game::get($idGame);
+        if (false !== ($aErrors = $oXml->getErrors())) {
+            $sMessage = implode('.<br>', $aErrors);
+            $sMessage = '<b>Error from thegamesdb.net API:</b> ' . $sMessage . '.';
+            $oMessage = VGL_Utils_CreateMessage::danger($sMessage);
+            $this->_helper->FlashMessenger($oMessage);
+            $this->redirect('/');
+            return;
+        }
+
+        $aGame = $oXml->parse();
+        if (empty($aGame)) {
+            $this->_helper->FlashMessenger(VGL_Utils_CreateMessage::danger('Accès à un jeu inexistant.'));
+            $this->redirect('/');
+            return;
+        }
+
+        $oGame = new Model_Vgl_Game();
+        if (true !== ($msg = $oGame->save($aGame))) {
+            $this->_helper->FlashMessenger(VGL_Utils_CreateMessage::danger($msg));
+            $this->redirect('/game/info/id/' . $idGame);
+            return;
+        }
+
+        $msg = 'Le jeu "' . $aGame['title'] . '" a correctement été ajouté.';
+        $this->_helper->FlashMessenger(VGL_Utils_CreateMessage::success($msg));
+        //$this->redirect('/game/index/');
+        $this->redirect('/');
+        return;
     }
 
     private function _sortPictures($aGame)
@@ -82,7 +122,6 @@ class GameController extends VGL_Controller_Action
         }
 
         return $aPicturesByCategory;
-
     }
 
 

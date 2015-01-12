@@ -12,7 +12,7 @@ class VGL_WebServices_Game
     const SERVICE = 'GetGame';
 
     /**
-     * @internal param int $id
+     * @param int ...$id
      * @return VGL_WebServices_Game
      */
     public static function get()

@@ -63,14 +63,12 @@ class IndexController extends VGL_Controller_Action
             return;
         }
 
-        $aGameList = [];
-        foreach ($aGames as $aGame) {
-            $aGameList[] = [
-                'label' => '<b>' . $aGame['GameTitle'] . '</b> sur ' . $aGame['Platform']
-                    . (null === $aGame['ReleaseDate'] ? '' : (' le ' . $aGame['ReleaseDate'])),
-                'id' => $aGame['id']
-            ];
-        }
+        $oGame = new Model_Vgl_Game();
+        $aOwnedGames = $oGame->getOwnedGames();
+
+        foreach ($aGames as &$aGame) {
+            $aGame['ownedDate'] = (isset($aOwnedGames[$aGame['id']]) ? $aOwnedGames[$aGame['id']] : null);
+        } unset($aGame);
 
         $this->view->aGameList = $aGames;
         $this->view->sSearch = $sQueryString;

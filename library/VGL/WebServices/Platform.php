@@ -12,16 +12,14 @@ class VGL_WebServices_Platform
     const SERVICE = 'GetPlatform';
 
     /**
-     * @internal param string $name
-     * @internal param string $platform
-     * @internal param string $genre
+     * @param int ...$id
      * @return VGL_WebServices_Platform
      */
     public static function get()
     {
         $aArgs = func_get_args();
         if (empty($aArgs)) {
-            throw new BadMethodCallException('Argument 1 (name) is missing.');
+            throw new BadMethodCallException('Argument 1 (id) is missing.');
         }
         list($id) = $aArgs;
         $xmlResult = self::_getCacheValue(self::SERVICE, $id);
